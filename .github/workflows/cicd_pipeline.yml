@@ -1,5 +1,9 @@
 name: Dev → Uat → Prod Promotion Pipeline
 
+permissions:
+  contents: write
+  pull-requests: write
+
 on:
   push:
     branches:
