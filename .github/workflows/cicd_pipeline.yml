@@ -1,8 +1,8 @@
 name: Dev → Uat → Prod Promotion Pipeline
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: write          # allows code checkout & push
+  pull-requests: write     # allows creating PRs
 
 on:
   push:
@@ -36,4 +36,4 @@ jobs:
           destination_branch: ${{ github.ref_name == 'dev' && 'uat' || 'prod' }}
           pr_title: "Promote changes from ${{ github.ref_name }} to next environment"
           pr_body: "This PR promotes changes from ${{ github.ref_name }} to next environment"
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.PAT_TOKEN }}
