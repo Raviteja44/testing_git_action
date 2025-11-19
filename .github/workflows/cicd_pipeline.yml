@@ -1,0 +1,35 @@
+name: Dev → Uat → Prod Promotion Pipeline
+
+on:
+  push:
+    branches:
+      - dev
+      - uat
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate code
+        run: |
+          echo "Running validation..."
+          ls -l
+
+  promote:
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Promote changes
+        uses: repo-sync/pull-request@v2
+        with:
+          source_branch: ${{ github.ref_name }}
+          destination_branch: ${{ github.ref_name == 'dev' && 'uat' || 'prod' }}
+          pr_title: "Promote changes from ${{ github.ref_name }} to next environment"
+          pr_body: "This PR promotes changes from ${{ github.ref_name }} to next environment"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
